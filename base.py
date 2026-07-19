@@ -16,13 +16,24 @@ def menu():
     8. Salir      
         """)
 
-def main():
+def mainBase():
 
     while (True):
         menu()
         opcion = input("Selecciona la opción que deseas ejecutar: ")
         if opcion == "1":
             import clientes
-            clientes.registroCliente()
-main()
+            clientes.registroCliente()    
+        #elif opcion == "2":
+        elif opcion == "3":
+            import vehiculos
+            vehiculos.main()
+        #elif opcion == "4":
+        #elif opcion == "5":
+        #elif opcion == "6":
+        #elif opcion == "7":
+        #elif opcion == "8":
+            print("\nGracias por usar DriveSafe, vuelva pronto.")
+            break        
+mainBase()
 
