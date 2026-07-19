@@ -19,9 +19,10 @@ def menu():
 def main():
 
     while (True):
-
         menu()
         opcion = input("Selecciona la opción que deseas ejecutar: ")
-
+        if opcion == "1":
+            import clientes
+            clientes.registroCliente()
 main()
 
