@@ -45,7 +45,7 @@ def registroCliente():
             break
         else:
             telefono = input("\nEl numero de telefono no puede contener caracteres ni letras especiales\nIngreselo nuevamente (debe tener 10 digitos): ")
-    datosRegistro["telefono"] = "+57" + telefono
+    datosRegistro["telefono"] = "+57 " + telefono
 
     while True:
         tipoVehiculo = input("¿El tipo de vehiculo al que aplica el cliente es carro? s/n: ")

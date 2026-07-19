@@ -24,7 +24,9 @@ def mainBase():
         if opcion == "1":
             import clientes
             clientes.registroCliente()    
-        #elif opcion == "2":
+        elif opcion == "2":
+            import instructores
+            instructores.registroInstructor
         elif opcion == "3":
             import vehiculos
             vehiculos.main()
