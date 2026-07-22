@@ -102,8 +102,6 @@ def _haySolapamiento(fechaNueva, horaNueva, duracionNueva, citaExistente):
             minutes=int(citaExistente["duracion"])
         )
 
-        # Fórmula de intersección de intervalos:
-        # A y B se cruzan si A empieza antes de que B termine Y B empieza antes de que A termine.
         return inicioNuevo < finExistente and inicioExistente < finNuevo
     except (ValueError, KeyError):
         return False
@@ -176,11 +174,10 @@ def _mostrarListaClientes():
 
 # ---------- Función principal ----------
 
-def ProgramarCita():
+def programarCita():
     """Programa una nueva cita validando compatibilidad y disponibilidad."""
     cargarCitas()
 
-    # --- 1. Cliente ---
     while True:
         _mostrarListaClientes()
         documentoCliente = input("Digite el documento del cliente: ").strip()
@@ -198,7 +195,6 @@ def ProgramarCita():
         print(f"Cliente encontrado: {cliente['nombre']}")
         break
 
-    # --- 2. Vehículo (compatible con el tipo del cliente) ---
     while True:
         _mostrarListaVehiculos()
         placa = input("Digite la placa del vehículo: ").upper().strip()
@@ -241,7 +237,6 @@ def ProgramarCita():
         print(f"Vehículo encontrado: {tipoVehiculo} con placa {placa}")
         break
 
-    # --- 3. Instructor (compatible con el tipo del vehículo) ---
     while True:
         _mostrarListaInstructores()
         documentoInstructor = input("Digite el documento del instructor: ").strip()
@@ -283,7 +278,6 @@ def ProgramarCita():
         print(f"Instructor encontrado: {instructor['nombre']}")
         break
 
-    # --- 4. Ciclo de fecha / hora / duración con validación de disponibilidad ---
     while True:
         while True:
             fecha = input("\nIngrese la fecha de la cita (DD/MM/AAAA): ").strip()
@@ -304,7 +298,6 @@ def ProgramarCita():
                 break
             print("\nDuración inválida. Debe ser un número entre 30 y 240.")
 
-        # Validar que no sea en el pasado
         if _esPasado(fecha, hora):
             print("\nNo se puede programar una cita en una fecha/hora que ya pasó.")
             reintentar = input("¿Desea intentar con otra fecha/hora? s/n: ").strip().lower()
@@ -316,7 +309,6 @@ def ProgramarCita():
             print("Programación cancelada.")
             return None
 
-        # Validar solapamiento con instructor
         if _instructorOcupado(documentoInstructor, fecha, hora, duracion):
             print("\nEl instructor ya tiene una cita programada en ese horario.")
             reintentar = input("¿Desea intentar con otra fecha/hora/duración? s/n: ").strip().lower()
@@ -328,7 +320,6 @@ def ProgramarCita():
             print("Programación cancelada.")
             return None
 
-        # Validar solapamiento con vehículo
         if _vehiculoOcupado(placa, fecha, hora, duracion):
             print("\nEl vehículo ya tiene una cita programada en ese horario.")
             reintentar = input("¿Desea intentar con otra fecha/hora/duración? s/n: ").strip().lower()
@@ -340,10 +331,8 @@ def ProgramarCita():
             print("Programación cancelada.")
             return None
 
-        # Si llegó hasta aquí, todo está OK
         break
 
-    # --- 5. Guardar la cita ---
     idCita = _generarIdCita()
     datos = {
         "cliente": documentoCliente,
@@ -352,7 +341,7 @@ def ProgramarCita():
         "fecha": fecha,
         "hora": hora,
         "duracion": duracion,
-        "asistencia": "",
+        "asistencia": "Pendiente",
         "observaciones": "",
     }
     citas[idCita] = datos
@@ -382,11 +371,56 @@ def historialCliente(documentoCliente):
     ]
 
 
+def registrarAsistencia():
+    """Pide el id de una cita ya existente y actualiza sus campos
+    'asistencia' y 'observaciones'. No crea citas nuevas, solo modifica
+    una que ya está guardada."""
+    cargarCitas()
+
+    idCita = input("Digite el id de la cita (ej: CITA001): ").upper().strip()
+    cita = buscarCita(idCita)
+    if cita is None:
+        print("\nNo existe ninguna cita con ese id.")
+        return None
+
+    print(f"\nCita encontrada: cliente {cita['cliente']}, fecha {cita['fecha']} {cita['hora']}")
+
+    while True:
+        respuesta = input("¿El cliente asistió a la práctica? s/n: ").strip().lower()
+        if _validarRespuestaSiNo(respuesta):
+            break
+        print("\nRespuesta inválida. Debe ingresar 's' o 'n'.")
+
+    cita["asistencia"] = "Asistió" if respuesta == "s" else "No asistió"
+    cita["observaciones"] = input("Ingrese observaciones de la práctica: ").strip()
+
+    guardarCitas()
+    print(f"\nAsistencia y observaciones registradas para la cita {idCita}.")
+    return cita
+
+
+def menuRegistrarAsistencia():
+    """Ciclo para registrar asistencia/observaciones de una o varias citas."""
+    cargarCitas()
+    while True:
+        registrarAsistencia()
+        while True:
+            decision = input("\n¿Desea registrar asistencia de otra cita? s/n: ").strip().lower()
+            if _validarRespuestaSiNo(decision):
+                break
+            print("\nRespuesta inválida. Debe ingresar 's' o 'n'.")
+        if decision == "n":
+            break
+
+    import base
+    base.menu()
+
+
 def menuProgramarCitas():
     """Ciclo de programación de citas."""
     cargarCitas()
     while True:
-        ProgramarCita()
+        programarCita()
         while True:
             decision = input("\n¿Desea programar otra cita? s/n: ").strip().lower()
             if _validarRespuestaSiNo(decision):

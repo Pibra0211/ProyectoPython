@@ -20,22 +20,28 @@ def mainBase():
 
     while (True):
         menu()
-        opcion = input("Selecciona la opción que deseas ejecutar: ")
+        opcion = input("Selecciona la opción que deseas ejecutar: ").strip()
         if opcion == "1":
             import clientes
             clientes.registroCliente()    
         elif opcion == "2":
             import instructores
-            instructores.registroInstructor
+            instructores.registroInstructor()
         elif opcion == "3":
             import vehiculos
-            vehiculos.main()
-        #elif opcion == "4":
-        #elif opcion == "5":
+            vehiculos.registrarVehiculo()
+        elif opcion == "4":
+            import programarCitas
+            programarCitas.ProgramarCita()
+        elif opcion == "5":
+            import programarCitas
+            programarCitas.buscarCita()
         #elif opcion == "6":
-        #elif opcion == "7":
-        #elif opcion == "8":
+        elif opcion == "7":
+            import programarCitas
+            programarCitas.historialCliente()
+        elif opcion == "8":
             print("\nGracias por usar DriveSafe, vuelva pronto.")
-            break        
+        break        
 mainBase()
 

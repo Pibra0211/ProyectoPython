@@ -8,7 +8,7 @@ instructores = {}
 
 
 def cargarInstructores():
-    """Carga el diccionario de instructores desde el archivo JSON, si existe."""
+    #"""Carga el diccionario de instructores desde el archivo JSON, si existe."""
     global instructores
     if os.path.exists(ARCHIVO_INSTRUCTORES):
         with open(ARCHIVO_INSTRUCTORES, "r", encoding="utf-8") as archivo:
@@ -22,16 +22,16 @@ def cargarInstructores():
 
 
 def guardarInstructores():
-    """Sobrescribe el archivo JSON con el diccionario completo de instructores."""
+   #"""Sobrescribe el archivo JSON con el diccionario completo de instructores."""
     os.makedirs("data", exist_ok=True)
     with open(ARCHIVO_INSTRUCTORES, "w", encoding="utf-8") as archivo:
         json.dump(instructores, archivo, indent=4, ensure_ascii=False)
 
 
 def registroInstructor():
-    """Pide los datos de un instructor por consola, los valida, los guarda
-    en el diccionario 'instructores' (indexado por documento) y persiste
-    el archivo. Devuelve el diccionario del instructor registrado."""
+    #"""Pide los datos de un instructor por consola, los valida, los guarda
+    #en el diccionario 'instructores' (indexado por documento) y persiste
+    #el archivo. Devuelve el diccionario del instructor registrado."""
 
     while True:
         nombre = input("Digite el nombre completo del instructor: ").title().strip()
@@ -85,18 +85,18 @@ def registroInstructor():
 
 
 def buscarInstructor(documento):
-    """Devuelve el diccionario del instructor con ese documento, o None si no existe."""
+    #"""Devuelve el diccionario del instructor con ese documento, o None si no existe."""
     return instructores.get(documento)
 
 
 def listarInstructores():
-    """Devuelve el diccionario completo de instructores."""
+    #"""Devuelve el diccionario completo de instructores."""
     return instructores
 
 
 def menuRegistroInstructores():
-    """Ciclo de registro: registra uno o varios instructores y, al terminar,
-    regresa al menú principal (base.menu())."""
+    #"""Ciclo de registro: registra uno o varios instructores y, al terminar,
+    #regresa al menú principal (base.menu())."""
     cargarInstructores()
     while True:
         registroInstructor()

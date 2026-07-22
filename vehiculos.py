@@ -8,7 +8,7 @@ vehiculos = {}
 
 
 def cargarVehiculos():
-    """Carga el diccionario de vehiculos desde el archivo JSON, si existe."""
+    #"""Carga el diccionario de vehiculos desde el archivo JSON, si existe."""
     global vehiculos
     if os.path.exists(ARCHIVO_VEHICULOS):
         with open(ARCHIVO_VEHICULOS, "r", encoding="utf-8") as archivo:
@@ -22,15 +22,15 @@ def cargarVehiculos():
 
 
 def guardarVehiculos():
-    """Sobrescribe el archivo JSON con el diccionario completo de vehiculos."""
+    #"""Sobrescribe el archivo JSON con el diccionario completo de vehiculos."""
     os.makedirs("data", exist_ok=True)
     with open(ARCHIVO_VEHICULOS, "w", encoding="utf-8") as archivo:
         json.dump(vehiculos, archivo, indent=4, ensure_ascii=False)
 
 
 def _placaValida(placa, tipo):
-    """Valida el formato completo de la placa segun el tipo de vehiculo.
-    Carro: 3 letras + 3 digitos (ABC123). Moto: 3 letras + 2 digitos + 1 letra (ABC12D)."""
+    #"""Valida el formato completo de la placa segun el tipo de vehiculo.
+    #Carro: 3 letras + 3 digitos (ABC123). Moto: 3 letras + 2 digitos + 1 letra (ABC12D)."""
     if len(placa) != 6:
         return False
     if tipo == "carro":
@@ -40,9 +40,9 @@ def _placaValida(placa, tipo):
 
 
 def registrarVehiculo():
-    """Pide el tipo y la placa de un vehiculo por consola, los valida, los
-    guarda en el diccionario 'vehiculos' (indexado por placa) y persiste
-    el archivo. Devuelve el diccionario del vehiculo registrado."""
+    #"""Pide el tipo y la placa de un vehiculo por consola, los valida, los
+    #guarda en el diccionario 'vehiculos' (indexado por placa) y persiste
+    #el archivo. Devuelve el diccionario del vehiculo registrado."""
 
     while True:
         tipo = input("¿El tipo de vehiculo a registrar es carro? s/n: ").strip().lower()
@@ -78,18 +78,18 @@ def registrarVehiculo():
 
 
 def buscarVehiculo(placa):
-    """Devuelve el diccionario del vehiculo con esa placa, o None si no existe."""
+    #"""Devuelve el diccionario del vehiculo con esa placa, o None si no existe."""
     return vehiculos.get(placa.upper().strip())
 
 
 def listarVehiculos():
-    """Devuelve el diccionario completo de vehiculos."""
+    #"""Devuelve el diccionario completo de vehiculos."""
     return vehiculos
 
 
 def menuRegistroVehiculos():
-    """Ciclo de registro: registra uno o varios vehiculos y, al terminar,
-    regresa al menú principal (base.menu())."""
+    #"""Ciclo de registro: registra uno o varios vehiculos y, al terminar,
+    #regresa al menú principal (base.menu())."""
     cargarVehiculos()
     while True:
         registrarVehiculo()
