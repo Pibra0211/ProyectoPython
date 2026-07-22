@@ -1,16 +1,39 @@
 #funcion registro
-import json 
+import json
+import os
+
+ARCHIVO_CLIENTES = "clientess.json"
+
 datosRegistro = {
     "nombre": "",
     "edad": "",
     "documento":"",
     "telefono":"",
     "tipo":"",
-
 }
 contadorInstructores = 1
+
+def cargarClientes():
+    if os.path.exists(ARCHIVO_CLIENTES):
+        try:
+            with open(ARCHIVO_CLIENTES, "r") as archivoC:
+                contenido = archivoC.read().strip()
+                if contenido:
+                    return json.loads(contenido)
+        except json.JSONDecodeError:
+            print(f"\nAviso: {ARCHIVO_CLIENTES} no tiene un formato JSON válido, se iniciará vacío.")
+    return {}
+
+clientes = cargarClientes()
+
+def guardarClientes():
+    with open(ARCHIVO_CLIENTES, "w") as archivoC:
+        json.dump(clientes, archivoC, indent=4)
+
+def obtenerCliente(documento):
+    return clientes.get(documento)
+
 def registroCliente():
-    global contadorInstructores
     while True:
         nombre = input("\nDigite el nombre completo del cliente: ").title().strip() 
         if nombre.replace(" ","").isalpha():
@@ -75,14 +98,14 @@ def registroCliente():
 
     datosRegistro["tipo"] = tipoVehiculo
 
-    with open("clientess.json","a+") as archivoC:
-            archivoC.write("\n" + json.dumps(datosRegistro))
+    clientes[documento] = datosRegistro.copy()
+    guardarClientes()
     return(datosRegistro)
 
 while True:
-    clientes = (registroCliente())
-    print(clientes)
-    print(f"\nSeñor/señora {clientes["nombre"]} sus datos se han registrado con exito")
+    datosDelCliente = (registroCliente())
+    print(datosDelCliente)
+    print(f"\nSeñor/señora {datosDelCliente['nombre']} sus datos se han registrado con exito")
     decision = input("¿Desea registrar un nuevo cliente? s/n: ")
     if decision == "s" or decision == "S":
         contadorInstructores += 1

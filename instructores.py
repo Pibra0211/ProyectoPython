@@ -1,4 +1,8 @@
 import json
+import os
+
+ARCHIVO_INSTRUCTORES = "instructoress.json"
+
 datosInstructor={
     "nombre":"",
     "documento":"",
@@ -6,6 +10,26 @@ datosInstructor={
     "telefono":""
 }
 contadorInstructores = 1
+
+def cargarInstructores():
+    if os.path.exists(ARCHIVO_INSTRUCTORES):
+        try:
+            with open(ARCHIVO_INSTRUCTORES, "r") as archivoI:
+                contenido = archivoI.read().strip()
+                if contenido:
+                    return json.loads(contenido)
+        except json.JSONDecodeError:
+            print(f"\nAviso: {ARCHIVO_INSTRUCTORES} no tiene un formato JSON válido, se iniciará vacío.")
+    return {}
+
+instructores = cargarInstructores()
+
+def guardarInstructores():
+    with open(ARCHIVO_INSTRUCTORES, "w") as archivoI:
+        json.dump(instructores, archivoI, indent=4)
+
+def obtenerInstructor(documento):
+    return instructores.get(documento)
 
 def registroInstructor():
   nombre = input("Digite el nombre completo del instructor: ").title().strip()
@@ -46,13 +70,14 @@ def registroInstructor():
         else:
             telefono = input("\nEl numero de telefono no puede contener caracteres ni letras especiales\nIngreselo nuevamente (debe tener 10 digitos): ")
   datosInstructor["telefono"] = "+57 " + telefono
-  with open("instructoress.json","a+") as archivoI:
-        archivoI.write("\n" + json.dumps(datosInstructor))
+
+  instructores[documento] = datosInstructor.copy()
+  guardarInstructores()
   return(datosInstructor)
 
 while True:
-    instructores = (registroInstructor())
-    print(f"\nLos datos del Señor/señora {instructores['nombre']} se han registrado con exito")
+    datosDelInstructor = (registroInstructor())
+    print(f"\nLos datos del Señor/señora {datosDelInstructor['nombre']} se han registrado con exito")
     decision = input("¿Desea registrar un nuevo instructor? s/n: ").lower()
 
     if decision == "s":
