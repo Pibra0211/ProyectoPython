@@ -5,9 +5,10 @@ datosInstructor={
     "especialidad":"",
     "telefono":""
 }
+contadorInstructores = 1
 
 def registroInstructor():
-  nombre = input("Digite el nombre completo del instructor: ")
+  nombre = input("Digite el nombre completo del instructor: ").title().strip()
   while True:
       if nombre.replace(" ","").isalpha():
           break
@@ -30,31 +31,37 @@ def registroInstructor():
   if especialidad == "n":
       especialidad = "moto"
   else:
-      tambien_moto = input("¿El instructor también se especializa en moto? s/n: ").strip().lower()
+      tambienMoto = input("¿El instructor también se especializa en moto? s/n: ").strip().lower()
       while True:
-          if tambien_moto == "s" or tambien_moto == "n":
+          if tambienMoto == "s" or tambienMoto == "n":
               break
           else:
-              tambien_moto = input("\nRespuesta inválida. Debe ingresar 's' o 'n': ").strip().lower()
-      especialidad = "carro y moto" if tambien_moto == "s" else "carro"
+              tambienMoto = input("\nRespuesta inválida. Debe ingresar 's' o 'n': ").strip().lower()
+      especialidad = "carro y moto" if tambienMoto == "s" else "carro"
   datosInstructor["especialidad"] = especialidad
   telefono = (input("Digite el numero de telefono del instructor: "))
   while True:
         if telefono.isdigit() and len(telefono) == 10:
             break
         else:
-            telefono = input("\nEl numero de telefono no puede contener caracteres ni lestas especiales\nIngreselo nuevamente (debe tener 10d igitos): ")
+            telefono = input("\nEl numero de telefono no puede contener caracteres ni letras especiales\nIngreselo nuevamente (debe tener 10 digitos): ")
   datosInstructor["telefono"] = "+57 " + telefono
   with open("instructoress.json","a+") as archivoI:
         archivoI.write("\n" + json.dumps(datosInstructor))
   return(datosInstructor)
-instructores = (registroInstructor())
-print(instructores)
-print(f"\nLos datos del Señor/señora {instructores["nombre"]} se han registrado con exito")
-desicion = input("¿Desea registrar un nuevo instructor? s/n: ")
-if desicion == "s" or desicion == "S":
-    registroInstructor()
-elif desicion == "n" or desicion == "N":
-    import base
-    print (base.menu())
-    
+
+while True:
+    instructores = (registroInstructor())
+    print(f"\nLos datos del Señor/señora {instructores['nombre']} se han registrado con exito")
+    decision = input("¿Desea registrar un nuevo instructor? s/n: ").lower()
+
+    if decision == "s":
+        contadorInstructores += 1
+        continue
+    elif decision == "n":
+        print(f"\nInstructores registrados {contadorInstructores}")
+        import base
+        print (base.menu())
+        break
+    else:
+        decision = input("\nRespuesta inválida. Debe ingresar 's' o 'n': ").lower()

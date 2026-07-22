@@ -8,8 +8,9 @@ datosRegistro = {
     "tipo":"",
 
 }
-
+contadorInstructores = 1
 def registroCliente():
+    global contadorInstructores
     while True:
         nombre = input("\nDigite el nombre completo del cliente: ").title().strip() 
         if nombre.replace(" ","").isalpha():
@@ -78,12 +79,18 @@ def registroCliente():
             archivoC.write("\n" + json.dumps(datosRegistro))
     return(datosRegistro)
 
-clientes = (registroCliente())
-print(clientes)
-print(f"\nSeñor/señora {clientes["nombre"]} sus datos se han registrado con exito")
-desicion = input("¿Desea registrar un nuevo cliente? s/n: ")
-if desicion == "s" or desicion == "S":
-    registroCliente()
-elif desicion == "n" or desicion == "N":
-    import base 
-    print (base.menu())
+while True:
+    clientes = (registroCliente())
+    print(clientes)
+    print(f"\nSeñor/señora {clientes["nombre"]} sus datos se han registrado con exito")
+    decision = input("¿Desea registrar un nuevo cliente? s/n: ")
+    if decision == "s" or decision == "S":
+        contadorInstructores += 1
+        continue
+    elif decision == "n" or decision == "N":
+        print(f"\nclientes registrados {contadorInstructores}")
+        import base 
+        print (base.menu())
+        break
+    else:
+        decision = input("\nRespuesta inválida. Debe ingresar 's' o 'n': ")
