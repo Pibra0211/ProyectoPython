@@ -20,6 +20,7 @@ def cargarInstructores():
         instructores = {}
     return instructores
 
+instructores = cargarInstructores()
 
 def guardarInstructores():
    #"""Sobrescribe el archivo JSON con el diccionario completo de instructores."""

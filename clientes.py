@@ -19,7 +19,7 @@ def cargarClientes():
     else:
         clientes = {}
     return clientes
-
+clientes = cargarClientes()
 
 def guardarClientes():
     """Sobrescribe el archivo JSON con el diccionario completo de clientes."""

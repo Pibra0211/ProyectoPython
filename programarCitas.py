@@ -25,6 +25,7 @@ def cargarCitas():
         citas = {}
     return citas
 
+citas = cargarCitas()
 
 def guardarCitas():
     """Sobrescribe el archivo JSON con el diccionario completo de citas."""
@@ -35,7 +36,7 @@ def guardarCitas():
 
 # ---------- Funciones auxiliares (uso interno del módulo) ----------
 
-def _generarIdCita():
+def generarIdCita():
     """Genera un identificador único tipo CITA001, CITA002, etc."""
     numero = len(citas) + 1
     while f"CITA{numero:03d}" in citas:
@@ -43,7 +44,7 @@ def _generarIdCita():
     return f"CITA{numero:03d}"
 
 
-def _validarFecha(fechaStr):
+def validarFecha(fechaStr):
     """Valida formato DD/MM/AAAA y que sea una fecha real."""
     if len(fechaStr) != 10:
         return False
@@ -56,7 +57,7 @@ def _validarFecha(fechaStr):
         return False
 
 
-def _validarHora(horaStr):
+def validarHora(horaStr):
     """Valida formato HH:MM en formato 24h."""
     if len(horaStr) != 5:
         return False
@@ -69,7 +70,7 @@ def _validarHora(horaStr):
         return False
 
 
-def _validarDuracion(duracionStr):
+def validarDuracion(duracionStr):
     """Valida que sea un entero entre 30 y 240 minutos. Devuelve el int o None."""
     if not duracionStr.isdigit():
         return None
@@ -79,23 +80,23 @@ def _validarDuracion(duracionStr):
     return None
 
 
-def _validarRespuestaSiNo(respuesta):
+def validarRespuestaSiNo(respuesta):
     """Devuelve True solo si la respuesta es 's' o 'n'."""
     return respuesta in ("s", "n")
 
 
-def _fechaHoraADatetime(fechaStr, horaStr):
+def fechaHoraADatetime(fechaStr, horaStr):
     """Convierte DD/MM/AAAA + HH:MM a un objeto datetime."""
     return datetime.strptime(f"{fechaStr} {horaStr}", "%d/%m/%Y %H:%M")
 
 
-def _haySolapamiento(fechaNueva, horaNueva, duracionNueva, citaExistente):
+def haySolapamiento(fechaNueva, horaNueva, duracionNueva, citaExistente):
     """Dos citas se solapan si sus intervalos [inicio, fin] se intersectan."""
     try:
-        inicioNuevo = _fechaHoraADatetime(fechaNueva, horaNueva)
+        inicioNuevo = fechaHoraADatetime(fechaNueva, horaNueva)
         finNuevo = inicioNuevo + timedelta(minutes=duracionNueva)
 
-        inicioExistente = _fechaHoraADatetime(
+        inicioExistente = fechaHoraADatetime(
             citaExistente["fecha"], citaExistente["hora"]
         )
         finExistente = inicioExistente + timedelta(
@@ -107,33 +108,33 @@ def _haySolapamiento(fechaNueva, horaNueva, duracionNueva, citaExistente):
         return False
 
 
-def _instructorOcupado(documentoInstructor, fecha, hora, duracion):
+def instructorOcupado(documentoInstructor, fecha, hora, duracion):
     """Revisa si el instructor ya tiene una cita que se solape con el horario."""
     for datos in citas.values():
         if datos["instructor"] == documentoInstructor:
-            if _haySolapamiento(fecha, hora, duracion, datos):
+            if haySolapamiento(fecha, hora, duracion, datos):
                 return True
     return False
 
 
-def _vehiculoOcupado(placa, fecha, hora, duracion):
+def vehiculoOcupado(placa, fecha, hora, duracion):
     """Revisa si el vehículo ya tiene una cita que se solape con el horario."""
     for datos in citas.values():
         if datos["vehiculo"] == placa:
-            if _haySolapamiento(fecha, hora, duracion, datos):
+            if haySolapamiento(fecha, hora, duracion, datos):
                 return True
     return False
 
 
-def _esPasado(fechaStr, horaStr):
+def esPasado(fechaStr, horaStr):
     """True si la fecha/hora ya pasó respecto al momento actual."""
     try:
-        return _fechaHoraADatetime(fechaStr, horaStr) < datetime.now()
+        return fechaHoraADatetime(fechaStr, horaStr) < datetime.now()
     except ValueError:
         return True
 
 
-def _mostrarListaVehiculos():
+def mostrarListaVehiculos():
     """Imprime de forma legible todos los vehículos registrados."""
     listaVehiculos = vehiculos.listarVehiculos()
     if not listaVehiculos:
@@ -146,7 +147,7 @@ def _mostrarListaVehiculos():
     return True
 
 
-def _mostrarListaInstructores():
+def mostrarListaInstructores():
     """Imprime de forma legible todos los instructores registrados."""
     listaInstructores = instructores.listarInstructores()
     if not listaInstructores:
@@ -159,7 +160,7 @@ def _mostrarListaInstructores():
     return True
 
 
-def _mostrarListaClientes():
+def mostrarListaClientes():
     """Imprime de forma legible todos los clientes registrados."""
     listaClientes = clientes.listarClientes()
     if not listaClientes:
@@ -179,13 +180,13 @@ def programarCita():
     cargarCitas()
 
     while True:
-        _mostrarListaClientes()
+        mostrarListaClientes()
         documentoCliente = input("Digite el documento del cliente: ").strip()
         cliente = clientes.buscarCliente(documentoCliente)
         if cliente is None:
             print("\nNo existe un cliente registrado con ese documento.")
             continuar = input("¿Desea intentar con otro documento? s/n: ").strip().lower()
-            while not _validarRespuestaSiNo(continuar):
+            while not validarRespuestaSiNo(continuar):
                 print("\nRespuesta inválida. Debe ingresar 's' o 'n'.")
                 continuar = input("¿Desea intentar con otro documento? s/n: ").strip().lower()
             if continuar == "n":
@@ -196,13 +197,13 @@ def programarCita():
         break
 
     while True:
-        _mostrarListaVehiculos()
+        mostrarListaVehiculos()
         placa = input("Digite la placa del vehículo: ").upper().strip()
         vehiculo = vehiculos.buscarVehiculo(placa)
         if vehiculo is None:
             print("\nNo existe un vehículo registrado con esa placa.")
             continuar = input("¿Desea intentar con otra placa? s/n: ").strip().lower()
-            while not _validarRespuestaSiNo(continuar):
+            while not validarRespuestaSiNo(continuar):
                 print("\nRespuesta inválida. Debe ingresar 's' o 'n'.")
                 continuar = input("¿Desea intentar con otra placa? s/n: ").strip().lower()
             if continuar == "n":
@@ -216,7 +217,7 @@ def programarCita():
         if tipoVehiculo == "carro" and tipoCliente not in ("carro", "carro y moto"):
             print(f"\nEl cliente solo aplica para {tipoCliente}, no para carro.")
             continuar = input("¿Desea intentar con otro vehículo? s/n: ").strip().lower()
-            while not _validarRespuestaSiNo(continuar):
+            while not validarRespuestaSiNo(continuar):
                 print("\nRespuesta inválida. Debe ingresar 's' o 'n'.")
                 continuar = input("¿Desea intentar con otro vehículo? s/n: ").strip().lower()
             if continuar == "n":
@@ -226,7 +227,7 @@ def programarCita():
         if tipoVehiculo == "moto" and tipoCliente not in ("moto", "carro y moto"):
             print(f"\nEl cliente solo aplica para {tipoCliente}, no para moto.")
             continuar = input("¿Desea intentar con otro vehículo? s/n: ").strip().lower()
-            while not _validarRespuestaSiNo(continuar):
+            while not validarRespuestaSiNo(continuar):
                 print("\nRespuesta inválida. Debe ingresar 's' o 'n'.")
                 continuar = input("¿Desea intentar con otro vehículo? s/n: ").strip().lower()
             if continuar == "n":
@@ -238,13 +239,13 @@ def programarCita():
         break
 
     while True:
-        _mostrarListaInstructores()
+        mostrarListaInstructores()
         documentoInstructor = input("Digite el documento del instructor: ").strip()
         instructor = instructores.buscarInstructor(documentoInstructor)
         if instructor is None:
             print("\nNo existe un instructor registrado con ese documento.")
             continuar = input("¿Desea intentar con otro documento? s/n: ").strip().lower()
-            while not _validarRespuestaSiNo(continuar):
+            while not validarRespuestaSiNo(continuar):
                 print("\nRespuesta inválida. Debe ingresar 's' o 'n'.")
                 continuar = input("¿Desea intentar con otro documento? s/n: ").strip().lower()
             if continuar == "n":
@@ -257,7 +258,7 @@ def programarCita():
         if tipoVehiculo == "carro" and especialidad not in ("carro", "carro y moto"):
             print(f"\nEl instructor solo se especializa en {especialidad}, no en carro.")
             continuar = input("¿Desea intentar con otro instructor? s/n: ").strip().lower()
-            while not _validarRespuestaSiNo(continuar):
+            while not validarRespuestaSiNo(continuar):
                 print("\nRespuesta inválida. Debe ingresar 's' o 'n'.")
                 continuar = input("¿Desea intentar con otro instructor? s/n: ").strip().lower()
             if continuar == "n":
@@ -267,7 +268,7 @@ def programarCita():
         if tipoVehiculo == "moto" and especialidad not in ("moto", "carro y moto"):
             print(f"\nEl instructor solo se especializa en {especialidad}, no en moto.")
             continuar = input("¿Desea intentar con otro instructor? s/n: ").strip().lower()
-            while not _validarRespuestaSiNo(continuar):
+            while not validarRespuestaSiNo(continuar):
                 print("\nRespuesta inválida. Debe ingresar 's' o 'n'.")
                 continuar = input("¿Desea intentar con otro instructor? s/n: ").strip().lower()
             if continuar == "n":
@@ -281,27 +282,27 @@ def programarCita():
     while True:
         while True:
             fecha = input("\nIngrese la fecha de la cita (DD/MM/AAAA): ").strip()
-            if _validarFecha(fecha):
+            if validarFecha(fecha):
                 break
             print("\nFecha inválida. Use DD/MM/AAAA con una fecha real (ej: no 31/02/2026).")
 
         while True:
             hora = input("Ingrese la hora de inicio (HH:MM, formato 24h): ").strip()
-            if _validarHora(hora):
+            if validarHora(hora):
                 break
             print("\nHora inválida. Use HH:MM (ej: 14:30).")
 
         while True:
             duracionStr = input("Digite la duración en minutos (30 a 240): ").strip()
-            duracion = _validarDuracion(duracionStr)
+            duracion = validarDuracion(duracionStr)
             if duracion is not None:
                 break
             print("\nDuración inválida. Debe ser un número entre 30 y 240.")
 
-        if _esPasado(fecha, hora):
+        if esPasado(fecha, hora):
             print("\nNo se puede programar una cita en una fecha/hora que ya pasó.")
             reintentar = input("¿Desea intentar con otra fecha/hora? s/n: ").strip().lower()
-            while not _validarRespuestaSiNo(reintentar):
+            while not validarRespuestaSiNo(reintentar):
                 print("\nRespuesta inválida. Debe ingresar 's' o 'n'.")
                 reintentar = input("¿Desea intentar con otra fecha/hora? s/n: ").strip().lower()
             if reintentar == "s":
@@ -309,10 +310,10 @@ def programarCita():
             print("Programación cancelada.")
             return None
 
-        if _instructorOcupado(documentoInstructor, fecha, hora, duracion):
+        if instructorOcupado(documentoInstructor, fecha, hora, duracion):
             print("\nEl instructor ya tiene una cita programada en ese horario.")
             reintentar = input("¿Desea intentar con otra fecha/hora/duración? s/n: ").strip().lower()
-            while not _validarRespuestaSiNo(reintentar):
+            while not validarRespuestaSiNo(reintentar):
                 print("\nRespuesta inválida. Debe ingresar 's' o 'n'.")
                 reintentar = input("¿Desea intentar con otra fecha/hora/duración? s/n: ").strip().lower()
             if reintentar == "s":
@@ -320,10 +321,10 @@ def programarCita():
             print("Programación cancelada.")
             return None
 
-        if _vehiculoOcupado(placa, fecha, hora, duracion):
+        if vehiculoOcupado(placa, fecha, hora, duracion):
             print("\nEl vehículo ya tiene una cita programada en ese horario.")
             reintentar = input("¿Desea intentar con otra fecha/hora/duración? s/n: ").strip().lower()
-            while not _validarRespuestaSiNo(reintentar):
+            while not validarRespuestaSiNo(reintentar):
                 print("\nRespuesta inválida. Debe ingresar 's' o 'n'.")
                 reintentar = input("¿Desea intentar con otra fecha/hora/duración? s/n: ").strip().lower()
             if reintentar == "s":
@@ -333,7 +334,7 @@ def programarCita():
 
         break
 
-    idCita = _generarIdCita()
+    idCita = generarIdCita()
     datos = {
         "cliente": documentoCliente,
         "instructor": documentoInstructor,
@@ -387,7 +388,7 @@ def registrarAsistencia():
 
     while True:
         respuesta = input("¿El cliente asistió a la práctica? s/n: ").strip().lower()
-        if _validarRespuestaSiNo(respuesta):
+        if validarRespuestaSiNo(respuesta):
             break
         print("\nRespuesta inválida. Debe ingresar 's' o 'n'.")
 
@@ -406,7 +407,7 @@ def menuRegistrarAsistencia():
         registrarAsistencia()
         while True:
             decision = input("\n¿Desea registrar asistencia de otra cita? s/n: ").strip().lower()
-            if _validarRespuestaSiNo(decision):
+            if validarRespuestaSiNo(decision):
                 break
             print("\nRespuesta inválida. Debe ingresar 's' o 'n'.")
         if decision == "n":
@@ -423,7 +424,7 @@ def menuProgramarCitas():
         programarCita()
         while True:
             decision = input("\n¿Desea programar otra cita? s/n: ").strip().lower()
-            if _validarRespuestaSiNo(decision):
+            if validarRespuestaSiNo(decision):
                 break
             print("\nRespuesta inválida. Debe ingresar 's' o 'n'.")
         if decision == "n":

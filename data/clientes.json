@@ -1,8 +1,20 @@
 {
-    "1231231230": {
-        "nombre": "Gero",
-        "edad": 28,
+    "12312312": {
+        "nombre": "Hdjdk",
+        "edad": 20,
         "telefono": "+57 1231231230",
         "tipo": "moto"
+    },
+    "1231231230": {
+        "nombre": "Mnekrjfio",
+        "edad": 20,
+        "telefono": "+57 1231231230",
+        "tipo": "moto"
+    },
+    "111111111": {
+        "nombre": "Gero",
+        "edad": 20,
+        "telefono": "+57 0000000000",
+        "tipo": "carro y moto"
     }
 }

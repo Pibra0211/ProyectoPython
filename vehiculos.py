@@ -20,6 +20,7 @@ def cargarVehiculos():
         vehiculos = {}
     return vehiculos
 
+vehiculos = cargarVehiculos()
 
 def guardarVehiculos():
     #"""Sobrescribe el archivo JSON con el diccionario completo de vehiculos."""

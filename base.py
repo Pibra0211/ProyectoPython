@@ -23,23 +23,48 @@ def mainBase():
         opcion = input("Selecciona la opción que deseas ejecutar: ").strip()
         if opcion == "1":
             import clientes
-            clientes.registroCliente()    
+            clientes.menuRegistroClientes()    
         elif opcion == "2":
             import instructores
-            instructores.registroInstructor()
+            instructores.menuRegistroInstructores()
         elif opcion == "3":
             import vehiculos
-            vehiculos.registrarVehiculo()
+            vehiculos.menuRegistroVehiculos()
         elif opcion == "4":
             import programarCitas
-            programarCitas.ProgramarCita()
+            programarCitas.menuProgramarCitas()
         elif opcion == "5":
             import programarCitas
-            programarCitas.buscarCita()
-        #elif opcion == "6":
+            idCita = input("Digite el id de la cita (ej: CITA001): ").strip()
+            cita = programarCitas.buscarCita(idCita)
+            if cita:
+                print(f"""
+        --- Cita {idCita.upper()} ---
+        Cliente: {cita['cliente']}
+        Instructor: {cita['instructor']}
+        Vehículo: {cita['vehiculo']}
+        Fecha: {cita['fecha']} {cita['hora']}
+        Duración: {cita['duracion']} minutos
+        Asistencia: {cita['asistencia']}
+        Observaciones: {cita['observaciones']}
+        """)
+            else:
+                print("\nNo existe ninguna cita con ese id.")
+
+        elif opcion == "6":
+            import programarCitas
+            programarCitas.menuRegistrarAsistencia()
+        
         elif opcion == "7":
             import programarCitas
-            programarCitas.historialCliente()
+            documento = input("Digite el documento del cliente: ").strip()
+            historial = programarCitas.historialCliente(documento)
+            if historial:
+                print(f"\n--- Historial de citas del cliente {documento} ---")
+                for cita in historial:
+                    print(f"{cita['id']} | Fecha: {cita['fecha']} {cita['hora']} | Asistencia: {cita['asistencia']}")
+            else:
+                print("\nEste cliente no tiene citas registradas.")
         elif opcion == "8":
             print("\nGracias por usar DriveSafe, vuelva pronto.")
         break        

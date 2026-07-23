@@ -1,0 +1,14 @@
+{
+    "VVV111": {
+        "tipoVehiculo": "carro",
+        "disponible": true
+    },
+    "BBB12N": {
+        "tipoVehiculo": "moto",
+        "disponible": true
+    },
+    "HHH999": {
+        "tipoVehiculo": "carro",
+        "disponible": true
+    }
+}
