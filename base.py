@@ -65,7 +65,7 @@ def mainBase():
             if historial:
                 print(f"\n--- Historial de citas del cliente {documento} ---")
                 for cita in historial:
-                    print(f"{cita['id']} | Fecha: {cita['fecha']} {cita['hora']} | Asistencia: {cita['asistencia']}")
+                    print(f"{cita['id']} | Fecha: {cita['fecha']} {cita['hora']} | Asistencia: {cita['asistencia']} | Observaciones: {cita['observaciones']}")
             else:
                 print("\nEste cliente no tiene citas registradas.")
         elif opcion == "8":
