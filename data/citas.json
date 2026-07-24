@@ -1,0 +1,12 @@
+{
+    "CITA001": {
+        "cliente": "1098072374",
+        "instructor": "99999999",
+        "vehiculo": "ABC123",
+        "fecha": "24/07/2026",
+        "hora": "14:40",
+        "duracion": 40,
+        "asistencia": "Asistió",
+        "observaciones": "estudiante habilidoso"
+    }
+}

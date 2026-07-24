@@ -56,6 +56,13 @@ def mainBase():
                 
         elif opcion == "6":
             import programarCitas
+            citasRegistradas = programarCitas.listarCitas()
+            if citasRegistradas:
+                print("\n--- Citas registradas ---")
+                for idCita, datos in citasRegistradas.items():
+                    print(f"{idCita} | Cliente: {datos['cliente']} | Fecha: {datos['fecha']} {datos['hora']} | Asistencia: {datos['asistencia']}")
+            else:
+                print("\nNo hay citas registradas en el sistema.")
             programarCitas.menuRegistrarAsistencia()
         
         elif opcion == "7":
