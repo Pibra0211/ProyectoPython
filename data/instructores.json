@@ -1,7 +1,27 @@
 {
-    "1098072374": {
-        "nombre": "David",
+    "99999999": {
+        "nombre": "Damian",
+        "especialidad": "carro",
+        "telefono": "+57 7777777777"
+    },
+    "88888888": {
+        "nombre": "Santiago Fastidioso",
+        "especialidad": "carro",
+        "telefono": "+57 6666666666"
+    },
+    "91536554": {
+        "nombre": "Duvan",
         "especialidad": "carro y moto",
-        "telefono": "+57 3153259348"
+        "telefono": "+57 1234567890"
+    },
+    "987654321": {
+        "nombre": "Yahir",
+        "especialidad": "carro",
+        "telefono": "+57 0123456789"
+    },
+    "98765432": {
+        "nombre": "Sanabria",
+        "especialidad": "carro y moto",
+        "telefono": "+57 1234567890"
     }
 }

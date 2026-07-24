@@ -18,9 +18,12 @@ def menu():
 
 def mainBase():
 
-    while (True):
+    while (True):    
         menu()
         opcion = input("Selecciona la opción que deseas ejecutar: ").strip()
+        if opcion.isalpha():
+            print("Respuesta invalida, digite un numero.")
+            mainBase()
         if opcion == "1":
             import clientes
             clientes.menuRegistroClientes()    
@@ -50,7 +53,7 @@ def mainBase():
         """)
             else:
                 print("\nNo existe ninguna cita con ese id.")
-
+                
         elif opcion == "6":
             import programarCitas
             programarCitas.menuRegistrarAsistencia()
@@ -67,6 +70,8 @@ def mainBase():
                 print("\nEste cliente no tiene citas registradas.")
         elif opcion == "8":
             print("\nGracias por usar DriveSafe, vuelva pronto.")
-        break        
+            break   
+
 mainBase()
+__name__ = "__main__"
 

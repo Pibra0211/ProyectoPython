@@ -59,11 +59,23 @@ def registroCliente():
             continue
         break
 
+    def telefonoYaRegistrado(telefono):
+    #"""Revisa si algún cliente ya tiene guardado ese número de teléfono."""
+        for datos in clientes.values():
+            if datos["telefono"] == "+57 " + telefono:
+                return True
+        return False
+
+
     while True:
         telefono = input("Digite el numero de telefono del cliente: ")
-        if telefono.isdigit() and len(telefono) == 10:
+        if telefono.isdigit() and len(telefono) == 10 and not telefonoYaRegistrado(telefono):
             break
-        print("\nEl numero de telefono no puede contener caracteres ni letras especiales (debe tener 10 digitos).")
+        if not (telefono.isdigit() and len(telefono) == 10):
+            print("\nEl numero de telefono no puede contener caracteres ni letras especiales (debe tener 10 digitos).")
+        else:
+            print("\nEse numero de telefono ya está registrado con otro cliente.")
+    
 
     while True:
         respuesta = input("¿El tipo de vehiculo al que aplica el cliente es carro? s/n: ").strip().lower()

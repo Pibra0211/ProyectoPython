@@ -66,7 +66,6 @@ def registrarVehiculo():
 
     datos = {
         "tipoVehiculo": tipoVehiculo,
-        "disponible": True,
     }
 
     vehiculos[placa] = datos

@@ -1,14 +1,14 @@
 {
-    "VVV111": {
-        "tipoVehiculo": "carro",
-        "disponible": true
+    "LIX470": {
+        "tipoVehiculo": "carro"
     },
-    "BBB12N": {
-        "tipoVehiculo": "moto",
-        "disponible": true
+    "FSO660": {
+        "tipoVehiculo": "carro"
     },
-    "HHH999": {
-        "tipoVehiculo": "carro",
-        "disponible": true
+    "BVJ660": {
+        "tipoVehiculo": "carro"
+    },
+    "NFS47G": {
+        "tipoVehiculo": "moto"
     }
 }

@@ -288,10 +288,14 @@ def programarCita():
 
         while True:
             hora = input("Ingrese la hora de inicio (HH:MM, formato 24h): ").strip()
-            if validarHora(hora):
-                break
-            print("\nHora inválida. Use HH:MM (ej: 14:30).")
-
+            if not validarHora(hora):
+                print("\nHora inválida. Use HH:MM (ej: 14:30).")
+                continue
+            horaPermitida = datetime.strptime(hora, "%H:%M").time()
+            if horaPermitida < datetime.strptime("07:00", "%H:%M").time() or horaPermitida > datetime.strptime("18:00", "%H:%M").time():
+                print("\nLa hora debe estar entre las 7:00 a.m. y las 6:00 p.m.")
+                continue
+            break
         while True:
             duracionStr = input("Digite la duración en minutos (30 a 240): ").strip()
             duracion = validarDuracion(duracionStr)
